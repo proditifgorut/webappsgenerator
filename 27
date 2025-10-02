@@ -1,0 +1,65 @@
+<template>
+  <div>
+    <div class="mb-8 text-center">
+      <h1 class="text-3xl font-bold">Pusat Sumber Daya</h1>
+      <p class="text-gray-600 dark:text-gray-400 mt-2 max-w-2xl mx-auto">
+        Temukan dokumentasi, panduan, dan tutorial untuk membantu Anda memaksimalkan AppCraft AI.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <a v-for="resource in resources" :key="resource.title" :href="resource.href" target="_blank" class="card p-6 flex items-start space-x-4 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+        <div class="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-lg">
+          <component :is="resource.icon" class="h-6 w-6 text-primary-600 dark:text-primary-400" />
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold mb-1">{{ resource.title }}</h3>
+          <p class="text-gray-600 dark:text-gray-400">{{ resource.description }}</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { BookOpen, Newspaper, MessageSquare, Code, Video, LifeBuoy } from 'lucide-vue-next'
+
+const resources = [
+  {
+    icon: BookOpen,
+    title: 'Dokumentasi',
+    description: 'Panduan terperinci tentang setiap fitur.',
+    href: '#'
+  },
+  {
+    icon: Newspaper,
+    title: 'Blog',
+    description: 'Tetap update dengan berita terbaru.',
+    href: '#'
+  },
+  {
+    icon: MessageSquare,
+    title: 'Forum Komunitas',
+    description: 'Ajukan pertanyaan dan bagikan proyek Anda.',
+    href: '#'
+  },
+  {
+    icon: Code,
+    title: 'Referensi API',
+    description: 'Integrasikan AppCraft AI dengan alat Anda.',
+    href: '#'
+  },
+  {
+    icon: Video,
+    title: 'Tutorial Video',
+    description: 'Tonton panduan video langkah demi langkah.',
+    href: '#'
+  },
+  {
+    icon: LifeBuoy,
+    title: 'Hubungi Dukungan',
+    description: 'Dapatkan bantuan dari tim ahli kami.',
+    href: '#'
+  }
+]
+</script>

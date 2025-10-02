@@ -1,0 +1,213 @@
+<template>
+  <div class="max-w-4xl mx-auto">
+    <!-- Header -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold mb-2">Generator Aplikasi AI</h1>
+      <p class="text-gray-600 dark:text-gray-400">
+        Jelaskan aplikasi Anda, unggah screenshot, atau gunakan perintah suara untuk menghasilkan aplikasi lengkap
+      </p>
+    </div>
+
+    <!-- Generation Methods -->
+    <div class="grid md:grid-cols-3 gap-6 mb-8">
+      <GenerationMethod
+        v-for="method in generationMethods"
+        :key="method.id"
+        :method="method"
+        :active="activeMethod === method.id"
+        @select="activeMethod = method.id"
+      />
+    </div>
+
+    <!-- Input Section -->
+    <div class="card p-6 mb-8">
+      <div v-if="activeMethod === 'text'">
+        <label class="block text-sm font-medium mb-2">Jelaskan aplikasi Anda</label>
+        <textarea 
+          v-model="textInput"
+          placeholder="Contoh: Buat aplikasi manajemen tugas dengan autentikasi pengguna, papan proyek, kolaborasi tim, unggah file, dan notifikasi real-time..."
+          class="input h-32 resize-none"
+        ></textarea>
+      </div>
+
+      <div v-else-if="activeMethod === 'screenshot'">
+        <label class="block text-sm font-medium mb-2">Unggah Screenshot atau Desain</label>
+        <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 text-center">
+          <Camera class="h-12 w-12 text-gray-400 mx-auto mb-4" />
+          <p class="text-gray-600 dark:text-gray-400 mb-4">
+            Letakkan screenshot Anda di sini atau klik untuk menelusuri
+          </p>
+          <button class="btn-secondary">Pilih File</button>
+        </div>
+      </div>
+
+      <div v-else-if="activeMethod === 'voice'">
+        <label class="block text-sm font-medium mb-2">Input Suara</label>
+        <div class="text-center py-8">
+          <button 
+            @click="toggleRecording"
+            :class="`p-6 rounded-full transition-colors ${
+              isRecording 
+                ? 'bg-red-500 hover:bg-red-600 text-white' 
+                : 'bg-primary-100 dark:bg-primary-900/30 hover:bg-primary-200 dark:hover:bg-primary-900/50 text-primary-600 dark:text-primary-400'
+            }`"
+          >
+            <Mic class="h-8 w-8" />
+          </button>
+          <p class="mt-4 text-gray-600 dark:text-gray-400">
+            {{ isRecording ? 'Merekam... Klik untuk berhenti' : 'Klik untuk mulai merekam' }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Configuration -->
+    <div class="card p-6 mb-8">
+      <h3 class="text-lg font-semibold mb-4">Konfigurasi Proyek</h3>
+      
+      <div class="grid md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm font-medium mb-2">Nama Proyek</label>
+          <input v-model="projectName" type="text" class="input" placeholder="Aplikasi Keren Saya" />
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium mb-2">Framework Frontend</label>
+          <select v-model="selectedStack.frontend" class="input">
+            <option value="react">React</option>
+            <option value="vue">Vue.js</option>
+            <option value="angular">Angular</option>
+          </select>
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium mb-2">Framework Backend</label>
+          <select v-model="selectedStack.backend" class="input">
+            <option value="nodejs">Node.js</option>
+            <option value="laravel">Laravel</option>
+            <option value="fastapi">FastAPI</option>
+          </select>
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium mb-2">Database</label>
+          <select v-model="selectedStack.database" class="input">
+            <option value="postgresql">PostgreSQL</option>
+            <option value="mysql">MySQL</option>
+            <option value="mongodb">MongoDB</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="mt-6">
+        <label class="flex items-center space-x-2">
+          <input v-model="includeAuth" type="checkbox" class="rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
+          <span>Sertakan autentikasi & otorisasi pengguna</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Generate Button -->
+    <div class="text-center">
+      <button 
+        @click="generateApp"
+        :disabled="!canGenerate || isGenerating"
+        class="btn-primary text-lg px-8 py-4 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        <div v-if="isGenerating" class="flex items-center space-x-2">
+          <div class="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></div>
+          <span>Menghasilkan Aplikasi...</span>
+        </div>
+        <div v-else class="flex items-center space-x-2">
+          <Sparkles class="h-5 w-5" />
+          <span>Hasilkan Aplikasi</span>
+        </div>
+      </button>
+    </div>
+
+    <!-- Generation Result -->
+    <div v-if="generationResult" class="mt-8">
+      <GenerationResult :result="generationResult" />
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+import { Camera, Mic, Sparkles, Type, Upload } from 'lucide-vue-next'
+import GenerationMethod from '../components/GenerationMethod.vue'
+import GenerationResult from '../components/GenerationResult.vue'
+
+const activeMethod = ref('text')
+const textInput = ref('')
+const projectName = ref('')
+const isRecording = ref(false)
+const isGenerating = ref(false)
+const includeAuth = ref(true)
+const generationResult = ref(null)
+
+const selectedStack = ref({
+  frontend: 'react',
+  backend: 'nodejs',
+  database: 'postgresql'
+})
+
+const generationMethods = [
+  {
+    id: 'text',
+    name: 'Deskripsi Teks',
+    description: 'Jelaskan aplikasi Anda dalam bahasa alami',
+    icon: Type,
+    color: 'text-blue-500'
+  },
+  {
+    id: 'screenshot',
+    name: 'Unggah Screenshot',
+    description: 'Unggah desain UI atau screenshot',
+    icon: Camera,
+    color: 'text-purple-500'
+  },
+  {
+    id: 'voice',
+    name: 'Perintah Suara',
+    description: 'Beri tahu kami apa yang ingin Anda bangun',
+    icon: Mic,
+    color: 'text-green-500'
+  }
+]
+
+const canGenerate = computed(() => {
+  if (activeMethod.value === 'text') return textInput.value.trim().length > 10
+  if (activeMethod.value === 'screenshot') return true // Would check for uploaded file
+  if (activeMethod.value === 'voice') return true // Would check for recorded audio
+  return false
+})
+
+const toggleRecording = () => {
+  isRecording.value = !isRecording.value
+}
+
+const generateApp = async () => {
+  isGenerating.value = true
+  
+  // Simulate AI generation
+  await new Promise(resolve => setTimeout(resolve, 3000))
+  
+  generationResult.value = {
+    projectName: projectName.value || 'Aplikasi yang Dihasilkan',
+    stack: selectedStack.value,
+    features: [
+      'Autentikasi Pengguna',
+      'Desain Responsif',
+      'REST API',
+      'Integrasi Database',
+      'Unggah File',
+      'Pembaruan Real-time'
+    ],
+    preview: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=600&fit=crop',
+    status: 'success'
+  }
+  
+  isGenerating.value = false
+}
+</script>

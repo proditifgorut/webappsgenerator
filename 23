@@ -1,0 +1,94 @@
+<template>
+  <div class="card p-6">
+    <div class="flex items-center justify-between mb-6">
+      <h3 class="text-xl font-semibold">Generasi Selesai!</h3>
+      <span class="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 px-3 py-1 rounded-full text-sm font-medium">
+        Sukses
+      </span>
+    </div>
+    
+    <div class="grid md:grid-cols-2 gap-6">
+      <div>
+        <h4 class="font-medium mb-3">Detail Proyek</h4>
+        <div class="space-y-2 text-sm">
+          <div class="flex justify-between">
+            <span class="text-gray-600 dark:text-gray-400">Nama:</span>
+            <span>{{ result.projectName }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-600 dark:text-gray-400">Frontend:</span>
+            <span class="capitalize">{{ result.stack.frontend }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-600 dark:text-gray-400">Backend:</span>
+            <span class="capitalize">{{ result.stack.backend }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-600 dark:text-gray-400">Database:</span>
+            <span class="capitalize">{{ result.stack.database }}</span>
+          </div>
+        </div>
+        
+        <h4 class="font-medium mb-3 mt-6">Fitur yang Dihasilkan</h4>
+        <ul class="space-y-1">
+          <li v-for="feature in result.features" :key="feature" class="flex items-center space-x-2">
+            <Check class="h-4 w-4 text-green-500" />
+            <span class="text-sm">{{ feature }}</span>
+          </li>
+        </ul>
+      </div>
+      
+      <div>
+        <h4 class="font-medium mb-3">Pratinjau Langsung</h4>
+        <div class="relative">
+          <img :src="result.preview" alt="App Preview" class="w-full rounded-lg" />
+          <div class="absolute inset-0 bg-black/10 rounded-lg flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+            <button class="bg-white text-gray-900 px-4 py-2 rounded-lg font-medium">
+              <ExternalLink class="h-4 w-4 inline mr-2" />
+              Buka Pratinjau
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="flex flex-wrap gap-4 mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+      <button class="btn-primary">
+        <Download class="h-4 w-4 mr-2" />
+        Unduh Kode
+      </button>
+      <button class="btn-secondary">
+        <Github class="h-4 w-4 mr-2" />
+        Push ke GitHub
+      </button>
+      <button class="btn-secondary">
+        <Rocket class="h-4 w-4 mr-2" />
+        Terapkan Sekarang
+      </button>
+      <button class="btn-secondary">
+        <Edit class="h-4 w-4 mr-2" />
+        Edit Proyek
+      </button>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { Check, ExternalLink, Download, Github, Rocket, Edit } from 'lucide-vue-next'
+
+interface GenerationResult {
+  projectName: string
+  stack: {
+    frontend: string
+    backend: string
+    database: string
+  }
+  features: string[]
+  preview: string
+  status: string
+}
+
+defineProps<{
+  result: GenerationResult
+}>()
+</script>

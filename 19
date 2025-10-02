@@ -1,0 +1,102 @@
+<template>
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <!-- Sidebar -->
+    <div :class="`fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transform transition-transform duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`">
+      <div class="flex items-center justify-between h-16 px-6 border-b border-gray-200 dark:border-gray-700">
+        <router-link to="/" class="flex items-center space-x-2">
+          <Zap class="h-8 w-8 text-primary-600" />
+          <span class="text-xl font-bold">AppCraft AI</span>
+        </router-link>
+        <button @click="sidebarOpen = false" class="lg:hidden">
+          <X class="h-6 w-6" />
+        </button>
+      </div>
+      
+      <nav class="p-4 space-y-2">
+        <SidebarItem 
+          v-for="item in sidebarItems" 
+          :key="item.name"
+          :item="item"
+          :active="$route.name === item.route"
+        />
+      </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="lg:ml-64">
+      <!-- Header -->
+      <header class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 h-16">
+        <div class="flex items-center justify-between h-full px-6">
+          <div class="flex items-center space-x-4">
+            <button @click="sidebarOpen = true" class="lg:hidden">
+              <Menu class="h-6 w-6" />
+            </button>
+            <h1 class="text-xl font-semibold">{{ pageTitle }}</h1>
+          </div>
+          
+          <div class="flex items-center space-x-4">
+            <button class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+              <Bell class="h-5 w-5" />
+            </button>
+            <button @click="toggleDarkMode" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+              <Sun v-if="isDark" class="h-5 w-5" />
+              <Moon v-else class="h-5 w-5" />
+            </button>
+            <div class="h-8 w-8 bg-primary-600 rounded-full flex items-center justify-center">
+              <User class="h-5 w-5 text-white" />
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Dashboard Content -->
+      <main class="p-6">
+        <router-view />
+      </main>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, computed, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+import { 
+  Zap, X, Menu, Bell, Sun, Moon, User, Home, Wand2, 
+  FolderOpen, Layout, BookOpen, Settings, HelpCircle 
+} from 'lucide-vue-next'
+import SidebarItem from '../components/SidebarItem.vue'
+
+const route = useRoute()
+const sidebarOpen = ref(false)
+const isDark = ref(false)
+
+const sidebarItems = [
+  { name: 'Dasbor', icon: Home, route: 'Dashboard', path: '/dashboard' },
+  { name: 'Generator AI', icon: Wand2, route: 'Generator', path: '/dashboard/generator' },
+  { name: 'Proyek Saya', icon: FolderOpen, route: 'Projects', path: '/dashboard/projects' },
+  { name: 'Templat', icon: Layout, route: 'Templates', path: '/dashboard/templates' },
+  { name: 'Sumber Daya', icon: BookOpen, route: 'Resources', path: '/dashboard/resources' },
+  { name: 'Pengaturan', icon: Settings, route: 'Settings', path: '/dashboard/settings' },
+  { name: 'Bantuan', icon: HelpCircle, route: 'Help', path: '/dashboard/help' }
+]
+
+const pageTitle = computed(() => {
+  const item = sidebarItems.find(item => item.route === route.name)
+  return item?.name || 'Dasbor'
+})
+
+const toggleDarkMode = () => {
+  isDark.value = !isDark.value
+  if (isDark.value) {
+    document.documentElement.classList.add('dark')
+    localStorage.theme = 'dark'
+  } else {
+    document.documentElement.classList.remove('dark')
+    localStorage.theme = 'light'
+  }
+}
+
+onMounted(() => {
+  isDark.value = document.documentElement.classList.contains('dark')
+})
+</script>

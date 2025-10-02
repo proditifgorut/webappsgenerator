@@ -1,0 +1,66 @@
+import { createRouter, createWebHistory } from 'vue-router'
+import LandingPage from '../views/LandingPage.vue'
+import Dashboard from '../views/Dashboard.vue'
+import DashboardHome from '../views/DashboardHome.vue'
+import Generator from '../views/Generator.vue'
+import Projects from '../views/Projects.vue'
+import Templates from '../views/Templates.vue'
+import Resources from '../views/Resources.vue'
+import Settings from '../views/Settings.vue'
+import Help from '../views/Help.vue'
+
+const routes = [
+  {
+    path: '/',
+    name: 'Landing',
+    component: LandingPage
+  },
+  {
+    path: '/dashboard',
+    component: Dashboard,
+    children: [
+      {
+        path: '',
+        name: 'Dashboard',
+        component: DashboardHome,
+      },
+      {
+        path: 'generator',
+        name: 'Generator',
+        component: Generator
+      },
+      {
+        path: 'projects',
+        name: 'Projects',
+        component: Projects
+      },
+      {
+        path: 'templates',
+        name: 'Templates',
+        component: Templates
+      },
+      {
+        path: 'resources',
+        name: 'Resources',
+        component: Resources
+      },
+      {
+        path: 'settings',
+        name: 'Settings',
+        component: Settings
+      },
+      {
+        path: 'help',
+        name: 'Help',
+        component: Help
+      }
+    ]
+  }
+]
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes
+})
+
+export default router

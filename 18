@@ -1,0 +1,31 @@
+<template>
+  <div class="card">
+    <button 
+      @click="isOpen = !isOpen"
+      class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+    >
+      <span class="font-medium">{{ faq.question }}</span>
+      <ChevronDown :class="`h-5 w-5 transform transition-transform ${isOpen ? 'rotate-180' : ''}`" />
+    </button>
+    
+    <div v-if="isOpen" class="px-6 pb-4">
+      <p class="text-gray-600 dark:text-gray-400">{{ faq.answer }}</p>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { ChevronDown } from 'lucide-vue-next'
+
+interface FAQ {
+  question: string
+  answer: string
+}
+
+defineProps<{
+  faq: FAQ
+}>()
+
+const isOpen = ref(false)
+</script>

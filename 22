@@ -1,0 +1,33 @@
+<template>
+  <button 
+    @click="$emit('select')"
+    :class="`card p-6 text-center transition-all duration-200 ${
+      active 
+        ? 'ring-2 ring-primary-500 bg-primary-50 dark:bg-primary-900/20' 
+        : 'hover:shadow-lg hover:scale-105'
+    }`"
+  >
+    <component :is="method.icon" :class="`h-8 w-8 mx-auto mb-3 ${method.color}`" />
+    <h3 class="font-semibold mb-2">{{ method.name }}</h3>
+    <p class="text-sm text-gray-600 dark:text-gray-400">{{ method.description }}</p>
+  </button>
+</template>
+
+<script setup lang="ts">
+interface GenerationMethod {
+  id: string
+  name: string
+  description: string
+  icon: any
+  color: string
+}
+
+defineProps<{
+  method: GenerationMethod
+  active: boolean
+}>()
+
+defineEmits<{
+  select: []
+}>()
+</script>

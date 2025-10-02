@@ -1,0 +1,41 @@
+<template>
+  <div>
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold">Templat</h1>
+      <p class="text-gray-600 dark:text-gray-400 mt-2">
+        Mulai proyek Anda berikutnya dengan templat siap pakai.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div v-for="template in templates" :key="template.id" class="card overflow-hidden group">
+        <img :src="template.imageUrl" :alt="template.name" class="h-48 w-full object-cover group-hover:scale-105 transition-transform duration-300" />
+        <div class="p-6">
+          <h3 class="text-xl font-semibold mb-2">{{ template.name }}</h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400 mb-4 h-10">{{ template.description }}</p>
+          <div class="flex items-center flex-wrap gap-2 mb-4">
+            <span v-for="tech in template.stack" :key="tech" class="bg-gray-100 dark:bg-gray-700 text-xs font-medium px-2 py-1 rounded">
+              {{ tech }}
+            </span>
+          </div>
+          <button class="btn-primary w-full">Gunakan Templat</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { faker } from '@faker-js/faker'
+
+faker.locale = 'id_ID';
+
+const templates = ref(Array.from({ length: 6 }, () => ({
+  id: faker.string.uuid(),
+  name: faker.commerce.productName() + ' Dasbor',
+  description: faker.lorem.sentence(10),
+  stack: faker.helpers.arrayElements(['React', 'Vue', 'Node.js', 'PostgreSQL', 'Tailwind'], { min: 2, max: 4 }),
+  imageUrl: `https://picsum.photos/seed/${faker.string.uuid()}/400/300`
+})))
+</script>

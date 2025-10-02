@@ -1,0 +1,61 @@
+<template>
+  <div>
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold">Selamat datang kembali, John!</h1>
+      <p class="text-gray-600 dark:text-gray-400 mt-2">Berikut adalah ringkasan singkat proyek dan aktivitas akun Anda.</p>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="grid md:grid-cols-2 gap-6 mb-8">
+      <div class="card p-6">
+        <h3 class="text-lg font-medium text-gray-600 dark:text-gray-400 mb-2">Proyek Aktif</h3>
+        <p class="text-3xl font-bold">4</p>
+      </div>
+      <div class="card p-6">
+        <h3 class="text-lg font-medium text-gray-600 dark:text-gray-400 mb-2">Anggota Tim</h3>
+        <p class="text-3xl font-bold">1</p>
+      </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="card">
+      <h3 class="text-xl font-semibold p-6 border-b border-gray-200 dark:border-gray-700">Aktivitas Terbaru</h3>
+      <ul class="divide-y divide-gray-200 dark:divide-gray-700">
+        <li v-for="activity in recentActivity" :key="activity.id" class="p-4 flex items-center space-x-4">
+          <div class="p-2 bg-gray-100 dark:bg-gray-700 rounded-full">
+            <component :is="activity.icon" class="h-5 w-5 text-gray-600 dark:text-gray-400" />
+          </div>
+          <div class="flex-1">
+            <p v-html="activity.text"></p>
+            <p class="text-sm text-gray-500">{{ activity.time }}</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { Wand2, Plus, GitBranch } from 'lucide-vue-next'
+
+const recentActivity = [
+  {
+    id: 1,
+    icon: Wand2,
+    text: `AI menghasilkan <strong>Aplikasi E-commerce</strong> baru.`,
+    time: '2 jam yang lalu'
+  },
+  {
+    id: 2,
+    icon: Plus,
+    text: `Anda membuat proyek baru: <strong>Dasbor Media Sosial</strong>.`,
+    time: '1 hari yang lalu'
+  },
+  {
+    id: 3,
+    icon: GitBranch,
+    text: `Mendorong <strong>Pengelola Tugas</strong> ke GitHub.`,
+    time: '3 days ago'
+  }
+]
+</script>

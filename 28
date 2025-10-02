@@ -1,0 +1,183 @@
+<template>
+  <div>
+    <h1 class="text-3xl font-bold mb-8">Pengaturan</h1>
+
+    <div class="space-y-10 max-w-3xl mx-auto">
+      <!-- Profile Settings -->
+      <div class="card p-6">
+        <h2 class="text-xl font-semibold mb-4">Profil</h2>
+        <div class="space-y-4">
+          <div class="grid md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium mb-1">Nama Depan</label>
+              <input type="text" value="John" class="input" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1">Nama Belakang</label>
+              <input type="text" value="Doe" class="input" />
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">Alamat Email</label>
+            <input type="email" value="john.doe@example.com" class="input" disabled />
+          </div>
+          <div class="pt-2">
+            <button class="btn-primary">Simpan Perubahan</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Appearance Settings -->
+      <div class="card p-6">
+        <h2 class="text-xl font-semibold mb-4">Tampilan</h2>
+        <div>
+          <label class="block text-sm font-medium mb-2">Tema</label>
+          <div class="flex space-x-4">
+            <button @click="setTheme('light')" :class="['p-4 border rounded-lg', theme === 'light' ? 'ring-2 ring-primary-500' : 'dark:border-gray-700']">Terang</button>
+            <button @click="setTheme('dark')" :class="['p-4 border rounded-lg', theme === 'dark' ? 'ring-2 ring-primary-500' : 'dark:border-gray-700']">Gelap</button>
+            <button @click="setTheme('system')" :class="['p-4 border rounded-lg', theme === 'system' ? 'ring-2 ring-primary-500' : 'dark:border-gray-700']">Sistem</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- API Integration -->
+      <div class="card p-6">
+        <h2 class="text-xl font-semibold mb-6">Integrasi API</h2>
+        
+        <div class="space-y-8">
+          <!-- OpenRouter API Settings -->
+          <div>
+            <div class="flex items-center space-x-3 mb-2">
+              <KeyRound class="h-5 w-5 text-gray-500" />
+              <h3 class="text-lg font-medium">OpenRouter</h3>
+            </div>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+              Hubungkan akun OpenRouter Anda untuk mengakses berbagai model AI. Dapatkan kunci Anda di 
+              <a href="https://openrouter.ai/" target="_blank" class="text-primary-600 hover:underline">openrouter.ai</a>.
+            </p>
+            
+            <div>
+              <label for="openrouter-key" class="block text-sm font-medium mb-1">Kunci API OpenRouter</label>
+              <div class="relative">
+                <input 
+                  :type="apiKeys.openrouter.show ? 'text' : 'password'" 
+                  id="openrouter-key" 
+                  v-model="apiKeys.openrouter.key"
+                  class="input pr-10" 
+                  placeholder="sk-or-..." 
+                />
+                <button 
+                  @click="apiKeys.openrouter.show = !apiKeys.openrouter.show"
+                  class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                >
+                  <Eye v-if="!apiKeys.openrouter.show" class="h-5 w-5" />
+                  <EyeOff v-else class="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- OpenAI API Settings -->
+          <div>
+            <div class="flex items-center space-x-3 mb-2">
+              <KeyRound class="h-5 w-5 text-gray-500" />
+              <h3 class="text-lg font-medium">OpenAI</h3>
+            </div>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+              Hubungkan akun OpenAI Anda. Dapatkan kunci Anda di 
+              <a href="https://platform.openai.com/api-keys" target="_blank" class="text-primary-600 hover:underline">platform.openai.com</a>.
+            </p>
+            
+            <div>
+              <label for="openai-key" class="block text-sm font-medium mb-1">Kunci API OpenAI</label>
+              <div class="relative">
+                <input 
+                  :type="apiKeys.openai.show ? 'text' : 'password'" 
+                  id="openai-key" 
+                  v-model="apiKeys.openai.key"
+                  class="input pr-10" 
+                  placeholder="sk-..." 
+                />
+                <button 
+                  @click="apiKeys.openai.show = !apiKeys.openai.show"
+                  class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                >
+                  <Eye v-if="!apiKeys.openai.show" class="h-5 w-5" />
+                  <EyeOff v-else class="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Claude API Settings -->
+          <div>
+            <div class="flex items-center space-x-3 mb-2">
+              <KeyRound class="h-5 w-5 text-gray-500" />
+              <h3 class="text-lg font-medium">Anthropic (Claude)</h3>
+            </div>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+              Hubungkan akun Anthropic Anda. Dapatkan kunci Anda di 
+              <a href="https://console.anthropic.com/settings/keys" target="_blank" class="text-primary-600 hover:underline">console.anthropic.com</a>.
+            </p>
+            
+            <div>
+              <label for="claude-key" class="block text-sm font-medium mb-1">Kunci API Claude</label>
+              <div class="relative">
+                <input 
+                  :type="apiKeys.claude.show ? 'text' : 'password'" 
+                  id="claude-key" 
+                  v-model="apiKeys.claude.key"
+                  class="input pr-10" 
+                  placeholder="sk-ant-..." 
+                />
+                <button 
+                  @click="apiKeys.claude.show = !apiKeys.claude.show"
+                  class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                >
+                  <Eye v-if="!apiKeys.claude.show" class="h-5 w-5" />
+                  <EyeOff v-else class="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-6 mt-6 border-t border-gray-200 dark:border-gray-700">
+          <button class="btn-primary">Simpan Semua Kunci API</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, onMounted, reactive } from 'vue'
+import { KeyRound, Eye, EyeOff } from 'lucide-vue-next'
+
+const theme = ref('system')
+
+const apiKeys = reactive({
+  openrouter: { key: '', show: false },
+  openai: { key: '', show: false },
+  claude: { key: '', show: false },
+})
+
+const setTheme = (newTheme: 'light' | 'dark' | 'system') => {
+  theme.value = newTheme;
+  if (newTheme === 'dark' || (newTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.documentElement.classList.add('dark')
+    localStorage.theme = 'dark'
+  } else {
+    document.documentElement.classList.remove('dark')
+    localStorage.theme = 'light'
+  }
+}
+
+onMounted(() => {
+  if (localStorage.theme === 'dark') {
+    theme.value = 'dark'
+  } else if (localStorage.theme === 'light') {
+    theme.value = 'light'
+  }
+})
+</script>

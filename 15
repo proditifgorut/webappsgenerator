@@ -1,0 +1,319 @@
+<template>
+  <div class="min-h-screen">
+    <!-- Header -->
+    <header class="fixed top-0 w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 z-50">
+      <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+          <div class="flex items-center space-x-2">
+            <Zap class="h-8 w-8 text-primary-600" />
+            <span class="text-xl font-bold">AppCraft AI</span>
+          </div>
+          
+          <div class="hidden md:flex items-center space-x-8">
+            <a href="#features" class="text-gray-600 dark:text-gray-400 hover:text-primary-600 transition-colors">Fitur</a>
+            <a href="#resources" class="text-gray-600 dark:text-gray-400 hover:text-primary-600 transition-colors">Sumber Daya</a>
+            <button @click="toggleDarkMode" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+              <Sun v-if="isDark" class="h-5 w-5" />
+              <Moon v-else class="h-5 w-5" />
+            </button>
+            <router-link to="/dashboard" class="btn-primary">Mulai</router-link>
+          </div>
+          
+          <button @click="showMobileMenu = !showMobileMenu" class="md:hidden p-2">
+            <Menu class="h-6 w-6" />
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="pt-20 pb-16 bg-gradient-to-br from-primary-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-900 dark:to-purple-900/20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+          <h1 class="text-4xl md:text-6xl font-bold mb-6">
+            Bangun Aplikasi Full-Stack dengan
+            <span class="bg-gradient-to-r from-primary-600 to-purple-600 bg-clip-text text-transparent">AI</span>
+          </h1>
+          <p class="text-xl text-gray-600 dark:text-gray-400 mb-8 max-w-3xl mx-auto">
+            Dari ide hingga penerapan dalam hitungan menit. Hasilkan aplikasi web lengkap dengan frontend, backend, 
+            dan database menggunakan AI. Cukup jelaskan apa yang Anda inginkan atau unggah screenshot.
+          </p>
+          
+          <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+            <router-link to="/dashboard/generator" class="btn-primary text-lg px-8 py-4 flex items-center">
+              <Wand2 class="h-5 w-5 mr-2" />
+              Mulai Membangun
+            </router-link>
+            <button class="btn-secondary text-lg px-8 py-4 flex items-center">
+              <Play class="h-5 w-5 mr-2" />
+              Lihat Demo
+            </button>
+          </div>
+
+          <!-- Demo Preview -->
+          <div class="relative max-w-5xl mx-auto">
+            <div class="card p-2">
+              <img 
+                src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&h=700&fit=crop" 
+                alt="AI App Generator Dashboard" 
+                class="w-full rounded-lg"
+              />
+            </div>
+            <div class="absolute -top-4 -right-4 bg-primary-600 text-white px-4 py-2 rounded-full text-sm font-medium">
+              Pratinjau Langsung
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl md:text-4xl font-bold mb-4">Fitur Canggih Berbasis AI</h2>
+          <p class="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+            Semua yang Anda butuhkan untuk membangun, menerapkan, dan menskalakan aplikasi web modern
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <FeatureCard
+            v-for="feature in features"
+            :key="feature.title"
+            :feature="feature"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Stack Selection -->
+    <section class="py-20 bg-gray-50 dark:bg-gray-800/50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl md:text-4xl font-bold mb-4">Tumpukan Teknologi Modern</h2>
+          <p class="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+            Pilih dari teknologi terbaru dan terpopuler
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="text-center">
+            <h3 class="text-xl font-semibold mb-4">Frontend</h3>
+            <div class="flex flex-wrap justify-center gap-3">
+              <TechBadge name="React" color="blue" />
+              <TechBadge name="Vue.js" color="green" />
+              <TechBadge name="Angular" color="red" />
+              <TechBadge name="TypeScript" color="blue" />
+              <TechBadge name="Tailwind CSS" color="cyan" />
+            </div>
+          </div>
+          
+          <div class="text-center">
+            <h3 class="text-xl font-semibold mb-4">Backend</h3>
+            <div class="flex flex-wrap justify-center gap-3">
+              <TechBadge name="Node.js" color="green" />
+              <TechBadge name="Laravel" color="red" />
+              <TechBadge name="Express" color="gray" />
+              <TechBadge name="FastAPI" color="green" />
+              <TechBadge name="GraphQL" color="pink" />
+            </div>
+          </div>
+          
+          <div class="text-center">
+            <h3 class="text-xl font-semibold mb-4">Database</h3>
+            <div class="flex flex-wrap justify-center gap-3">
+              <TechBadge name="PostgreSQL" color="blue" />
+              <TechBadge name="MySQL" color="orange" />
+              <TechBadge name="MongoDB" color="green" />
+              <TechBadge name="Redis" color="red" />
+              <TechBadge name="Supabase" color="green" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="resources" class="py-20 bg-gray-50 dark:bg-gray-800/50">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl md:text-4xl font-bold mb-4">Pertanyaan yang Sering Diajukan</h2>
+        </div>
+
+        <div class="space-y-6">
+          <FAQItem
+            v-for="faq in faqs"
+            :key="faq.question"
+            :faq="faq"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid md:grid-cols-4 gap-8">
+          <div>
+            <div class="flex items-center space-x-2 mb-4">
+              <Zap class="h-8 w-8 text-primary-400" />
+              <span class="text-xl font-bold">AppCraft AI</span>
+            </div>
+            <p class="text-gray-400 mb-4">
+              Bangun aplikasi full-stack dengan AI. Dari ide hingga penerapan dalam hitungan menit.
+            </p>
+            <div class="flex space-x-4">
+              <Github class="h-5 w-5 text-gray-400 hover:text-white cursor-pointer" />
+              <Twitter class="h-5 w-5 text-gray-400 hover:text-white cursor-pointer" />
+              <Linkedin class="h-5 w-5 text-gray-400 hover:text-white cursor-pointer" />
+            </div>
+          </div>
+
+          <div>
+            <h3 class="font-semibold mb-4">Produk</h3>
+            <ul class="space-y-2 text-gray-400">
+              <li><a href="#features" class="hover:text-white">Fitur</a></li>
+              <li><a href="/dashboard/templates" class="hover:text-white">Templat</a></li>
+              <li><a href="#" class="hover:text-white">API</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="font-semibold mb-4">Sumber Daya</h3>
+            <ul class="space-y-2 text-gray-400">
+              <li><a href="#" class="hover:text-white">Dokumentasi</a></li>
+              <li><a href="#" class="hover:text-white">Blog</a></li>
+              <li><a href="#" class="hover:text-white">Komunitas</a></li>
+              <li><a href="#" class="hover:text-white">Dukungan</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="font-semibold mb-4">Perusahaan</h3>
+            <ul class="space-y-2 text-gray-400">
+              <li><a href="#" class="hover:text-white">Tentang Kami</a></li>
+              <li><a href="#" class="hover:text-white">Karir</a></li>
+              <li><a href="#" class="hover:text-white">Privasi</a></li>
+              <li><a href="#" class="hover:text-white">Ketentuan</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="border-t border-gray-800 pt-8 mt-8 text-center text-gray-400">
+          <p>&copy; 2025 AppCraft AI. Hak cipta dilindungi undang-undang.</p>
+        </div>
+      </div>
+    </footer>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
+import { 
+  Zap, Menu, Sun, Moon, Wand2, Play, Github, Twitter, Linkedin,
+  Sparkles, Code, Database, Rocket, Users, Shield,
+  Camera, Mic, GitBranch
+} from 'lucide-vue-next'
+import FeatureCard from '../components/FeatureCard.vue'
+import TechBadge from '../components/TechBadge.vue'
+import FAQItem from '../components/FAQItem.vue'
+
+const showMobileMenu = ref(false)
+const isDark = ref(false)
+
+const toggleDarkMode = () => {
+  isDark.value = !isDark.value
+  if (isDark.value) {
+    document.documentElement.classList.add('dark')
+    localStorage.theme = 'dark'
+  } else {
+    document.documentElement.classList.remove('dark')
+    localStorage.theme = 'light'
+  }
+}
+
+const features = [
+  {
+    icon: Sparkles,
+    title: 'Generasi Bertenaga AI',
+    description: 'Jelaskan aplikasi Anda atau unggah screenshot. AI kami akan menghasilkan aplikasi full-stack lengkap secara instan.',
+    color: 'text-yellow-500'
+  },
+  {
+    icon: Camera,
+    title: 'Screenshot menjadi Kode',
+    description: 'Unggah screenshot UI apa pun dan saksikan transformasinya menjadi kode fungsional yang sempurna.',
+    color: 'text-purple-500'
+  },
+  {
+    icon: Mic,
+    title: 'Perintah Suara',
+    description: 'Bangun aplikasi hanya dengan berbicara. Pemrosesan bahasa alami kami memahami kebutuhan Anda.',
+    color: 'text-green-500'
+  },
+  {
+    icon: Code,
+    title: 'Tumpukan Teknologi Modern',
+    description: 'Pilih dari React, Vue, Angular, Node.js, Laravel, dan database modern seperti PostgreSQL.',
+    color: 'text-blue-500'
+  },
+  {
+    icon: Database,
+    title: 'Pembangun Skema Visual',
+    description: 'Rancang database Anda secara visual dengan drag-and-drop. Hasilkan operasi CRUD secara otomatis.',
+    color: 'text-indigo-500'
+  },
+  {
+    icon: Shield,
+    title: 'Autentikasi Bawaan',
+    description: 'Manajemen pengguna, peran, izin, dan fitur keamanan otomatis sudah termasuk.',
+    color: 'text-red-500'
+  },
+  {
+    icon: Rocket,
+    title: 'Penerapan Instan',
+    description: 'Terapkan ke produksi dengan satu klik. Termasuk domain kustom, SSL, dan CDN.',
+    color: 'text-orange-500'
+  },
+  {
+    icon: GitBranch,
+    title: 'Kepemilikan Kode Sumber',
+    description: 'Unduh kode sumber lengkap atau dorong langsung ke repositori GitHub Anda.',
+    color: 'text-gray-500'
+  },
+  {
+    icon: Users,
+    title: 'Kolaborasi Tim',
+    description: 'Undang anggota tim, bagikan proyek, dan berkolaborasi secara real-time.',
+    color: 'text-pink-500'
+  }
+]
+
+const faqs = [
+  {
+    question: 'Bagaimana cara kerja generator AI?',
+    answer: 'AI kami menganalisis deskripsi, screenshot, atau perintah suara Anda untuk memahami kebutuhan Anda. Kemudian, ia menghasilkan aplikasi full-stack lengkap termasuk komponen frontend, API backend, skema database, dan konfigurasi penerapan.'
+  },
+  {
+    question: 'Apakah saya memiliki kode yang dihasilkan?',
+    answer: 'Ya, tentu saja! Semua kode yang dihasilkan adalah milik Anda. Anda dapat mengunduh kode sumber lengkap, memodifikasinya, atau mendorongnya langsung ke repositori GitHub Anda. Tidak ada batasan lisensi.'
+  },
+  {
+    question: 'Teknologi apa yang didukung?',
+    answer: 'Kami mendukung framework modern seperti React, Vue.js, Angular untuk frontend; Node.js, Laravel untuk backend; dan PostgreSQL, MySQL, MongoDB untuk database. Kami secara teratur menambahkan dukungan untuk teknologi baru.'
+  },
+  {
+    question: 'Dapatkah saya menyesuaikan aplikasi yang dihasilkan?',
+    answer: 'Ya! Anda memiliki kontrol penuh atas kode yang dihasilkan. Gunakan editor visual kami untuk membuat perubahan, atau unduh dan modifikasi kode secara lokal. Semua aplikasi dibangun dengan kode yang bersih dan mudah dipelihara.'
+  },
+  {
+    question: 'Opsi hosting apa yang tersedia?',
+    answer: 'Kami menawarkan hosting lingkungan pengembangan gratis dan hosting siap produksi dengan domain kustom dan SSL. Pelanggan perusahaan mendapatkan infrastruktur khusus dan opsi white-label.'
+  }
+]
+
+onMounted(() => {
+  isDark.value = document.documentElement.classList.contains('dark')
+})
+</script>

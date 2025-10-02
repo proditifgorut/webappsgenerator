@@ -1,0 +1,59 @@
+<template>
+  <div>
+    <div class="flex items-center justify-between mb-8">
+      <h1 class="text-3xl font-bold">Proyek Saya</h1>
+      <button class="btn-primary flex items-center space-x-2">
+        <Plus class="h-5 w-5" />
+        <span>Proyek Baru</span>
+      </button>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div v-for="project in projects" :key="project.id" class="card p-6 flex flex-col justify-between hover:shadow-xl transition-shadow duration-300">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-xl font-semibold">{{ project.name }}</h3>
+            <span :class="`px-2 py-1 rounded-full text-xs font-medium ${statusColors[project.status]}`">
+              {{ project.status }}
+            </span>
+          </div>
+          <div class="flex items-center flex-wrap gap-x-4 gap-y-2 mb-4">
+             <div v-if="project.stack.includes('React')" class="flex items-center space-x-1 text-sm text-gray-600 dark:text-gray-400"><Code class="h-4 w-4 text-blue-500" /><span>React</span></div>
+             <div v-if="project.stack.includes('Vue')" class="flex items-center space-x-1 text-sm text-gray-600 dark:text-gray-400"><Code class="h-4 w-4 text-green-500" /><span>Vue</span></div>
+             <div v-if="project.stack.includes('Nodejs')" class="flex items-center space-x-1 text-sm text-gray-600 dark:text-gray-400"><Server class="h-4 w-4 text-green-600" /><span>Node.js</span></div>
+             <div v-if="project.stack.includes('PostgreSQL')" class="flex items-center space-x-1 text-sm text-gray-600 dark:text-gray-400"><Database class="h-4 w-4 text-blue-400" /><span>Postgres</span></div>
+          </div>
+          <p class="text-sm text-gray-500 dark:text-gray-400">
+            Terakhir diperbarui: {{ project.lastUpdated }}
+          </p>
+        </div>
+        <div class="flex items-center space-x-2 mt-6">
+          <button class="btn-secondary flex-1 text-sm py-2">Buka</button>
+          <button class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+            <MoreVertical class="h-5 w-5" />
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { Plus, MoreVertical, Code, Server, Database } from 'lucide-vue-next'
+import { faker } from '@faker-js/faker'
+
+const statusColors: Record<string, string> = {
+  Aktif: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
+  'Dalam Pengerjaan': 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300',
+  Dijeda: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
+}
+
+const projects = ref(Array.from({ length: 6 }, () => ({
+  id: faker.string.uuid(),
+  name: faker.commerce.productName() + ' App',
+  status: faker.helpers.arrayElement(['Aktif', 'Dalam Pengerjaan', 'Dijeda']),
+  stack: faker.helpers.arrayElements(['React', 'Vue', 'Nodejs', 'PostgreSQL'], { min: 2, max: 3 }),
+  lastUpdated: faker.date.recent().toLocaleDateString('id-ID')
+})))
+</script>

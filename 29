@@ -1,0 +1,56 @@
+<template>
+  <div>
+    <div class="text-center mb-12">
+      <h1 class="text-3xl font-bold mb-2">Ada yang bisa kami bantu?</h1>
+      <div class="relative max-w-lg mx-auto mt-6">
+        <input type="text" placeholder="Cari bantuan..." class="input pl-12" />
+        <Search class="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <a v-for="topic in helpTopics" :key="topic.title" href="#" class="card p-6 text-center hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+        <component :is="topic.icon" class="h-10 w-10 mx-auto mb-4 text-primary-600 dark:text-primary-400" />
+        <h3 class="text-xl font-semibold mb-2">{{ topic.title }}</h3>
+        <p class="text-gray-600 dark:text-gray-400">{{ topic.description }}</p>
+      </a>
+    </div>
+
+    <div class="mt-16 text-center">
+      <h2 class="text-2xl font-semibold mb-4">Tidak menemukan yang Anda cari?</h2>
+      <button class="btn-primary">Hubungi Dukungan</button>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { Search, Rocket, User, Shield, Code, BookOpen } from 'lucide-vue-next'
+
+const helpTopics = [
+  {
+    icon: Rocket,
+    title: 'Mulai',
+    description: 'Pelajari dasar-dasar AppCraft AI.'
+  },
+  {
+    icon: User,
+    title: 'Pengaturan Akun',
+    description: 'Perbarui profil dan preferensi Anda.'
+  },
+  {
+    icon: Shield,
+    title: 'Keamanan',
+    description: 'Pelajari tentang langkah-langkah keamanan kami.'
+  },
+  {
+    icon: Code,
+    title: 'Integrasi',
+    description: 'Hubungkan dengan layanan lain.'
+  },
+  {
+    icon: BookOpen,
+    title: 'Penggunaan API',
+    description: 'Baca dokumentasi API kami.'
+  }
+]
+</script>
